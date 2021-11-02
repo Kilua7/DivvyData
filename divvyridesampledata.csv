@@ -1,0 +1,14 @@
+﻿ride_id,rideable_type,started_at,ended_at,start_station_name,end_station_name,start_lat,start_lng,end_lat,end_lng,member_casual
+E07475A697F1E70B,classic_bike,9/1/21 0:13,9/1/21 0:15,Clark St & Chicago Ave,Clark St & Elm St,41.89675,-87.63089,41.902973,-87.63128,member
+7E3274801B3930F3,classic_bike,9/1/21 5:52,9/1/21 6:51,Rush St & Superior St,Michigan Ave & Oak St,41.89576475,-87.62590803,41.90096039,-87.62377664,casual
+866C563C76C4BFDF,electric_bike,9/1/21 12:11,9/1/21 13:39,LaSalle St & Illinois St,Sheffield Ave & Willow St,41.89066933,-87.63150067,41.91364,-87.65262567,member
+BD6C843E4D352005,docked_bike,9/1/21 10:54,9/1/21 11:16,Museum of Science and Industry,Museum of Science and Industry,41.791728,-87.583945,41.791728,-87.583945,casual
+99C2180D2DA1318E,electric_bike,9/1/21 14:25,9/1/21 14:36,,Rockwell St & Eastwood Ave,41.93,-87.7,41.9657405,-87.69361183,member
+5A60EF22D237C789,electric_bike,9/4/21 2:29,9/4/21 2:58,,,41.93,-87.66,41.9,-87.68,casual
+F0983F87C185DA6A,classic_bike,9/4/21 12:50,9/4/21 12:56,Sheridan Rd & Lawrence Ave,Broadway & Wilson - Truman College Vaccination Site,41.969517,-87.654691,41.965221,-87.658139,casual
+2D7FD175ADC44F71,classic_bike,9/4/21 12:50,9/4/21 13:24,Lakefront Trail & Bryn Mawr Ave,Seeley Ave & Roscoe St,41.9840367,-87.65231047,41.943403,-87.679618,member
+B465E78B601DB5A8,classic_bike,9/4/21 19:17,9/4/21 19:43,Broadway & Belmont Ave,Broadway & Thorndale Ave,41.940106,-87.645451,41.98974251,-87.66014062,member
+12907BAAAED46484,classic_bike,9/4/21 20:46,9/4/21 21:00,Honore St & Division St,Wells St & Evergreen Ave,41.903119,-87.673935,41.906724,-87.63483,member
+753CB15A8B3E6A3F,docked_bike,9/4/21 20:46,9/4/21 22:48,Millennium Park,Michigan Ave & Washington St,41.881032,-87.624084,41.883984,-87.624684,casual
+0CDA1DCA8E980FA8,electric_bike,9/4/21 20:46,9/4/21 20:49,Sheffield Ave & Wrightwood Ave,Greenview Ave & Fullerton Ave,41.92864033,-87.653872,41.92538233,-87.66582083,member
+3246A2D28095F041,electric_bike,9/4/21 20:46,9/4/21 21:11,,Kedzie Ave & Milwaukee Ave,41.93,-87.65,41.92957283,-87.7078205,casual
