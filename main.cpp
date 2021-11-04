@@ -15,21 +15,10 @@
 #include <vector>     // For vectors
 #include <string>     // String operations
 #include <algorithm>  // use of vector algorithms
-#include <cmath>
-#include <iomanip>
+#include <cmath>      // For math calculations
+#include <iomanip>    // For setprecision to work correctly
 
 using namespace std;
-/*
-// filepaths for Macbook testing
-const string sampleRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../divvyridesampledata.csv";
-const string weekendRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../weekdayweekend.csv";
-const string septRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../all_divvy_rides_september.csv";
-*/
-
-//filepaths for zybooks testing
-const string sampleRidesFile = "divvyridesampledata.csv";
-const string weekendRidesFile = "weekdayweekend.csv";
-const string septRidesFile = "all_divvy_rides_september.csv";
 
 class bikeTrip {
 
@@ -55,8 +44,8 @@ public:
        this->rideID = rideID;
     }
 
-    void setType(bool member) {
-       this->member = member;
+    void setType(string type) {
+       this->bikeType = type;
     }
 
     void setStartTime(string startTime) {
@@ -67,32 +56,33 @@ public:
        this->endTime = endTime;
     }
 
-    void setStartStationName (long double startLat) {
-       this->startLat = startLat;
-    }
-
-    void setEndStationName (long double startLong) {
-       this->startLong = startLong;
-    }
-
-    void setStartLat (long double endLat) {
-       this->endLat = endLat;
-    }
-
-    void setStartLng (long double endLong) {
-       this->endLong = endLong;
-    }
-
-    void setEndLat(string type) {
-       this->bikeType = type;
-    }
-
-    void setEndLng(string startStationName) {
+    void setStartStationName (string startStationName) {
        this->startStationName = startStationName;
     }
 
-    void setMember(string endStationName) {
+    void setEndStationName (string endStationName) {
        this->endStationName = endStationName;
+    }
+
+    void setStartLat (long double startLat) {
+       this->startLat = startLat;
+    }
+
+    void setStartLong (long double startLong) {
+       this->startLong = startLong;
+    }
+
+    void setEndLat(long double endLat) {
+       this->endLat = endLat;
+    }
+
+    void setEndLong(long double endLong) {
+       this->endLong = endLong;
+    }
+
+    void setMember(bool member) {
+        this->member = member;
+        
     }
 
    //Getters
@@ -140,61 +130,7 @@ public:
       return this->member;
    }
     
-    
-    bikeTrip(string excelData) { // This will allow us to extract data from excel and place data type in appropriate spot based on where code finds commas
-
-         int commaSearch = excelData.find(",");
-         this->rideID = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->bikeType = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->startTime = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->endTime = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->startStationName = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->endStationName = excelData.substr(0, commaSearch);
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->startLat = stod((excelData.substr(0, commaSearch)));
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->startLong = stod(excelData.substr(0, commaSearch));
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->endLat = stod((excelData.substr(0, commaSearch)));
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         this->endLong = stod((excelData.substr(0, commaSearch)));
-
-         excelData.replace(0, commaSearch + 1, "");
-         commaSearch = excelData.find(",");
-         string checkMember = excelData.substr(0, commaSearch);
-            
-          //Check if bike user is a Member or not
-         if (checkMember == "member\r") {//Need \r to ensure the data gets read properly. (Thanks Grace)
-            this->member = true;
-         } else {
-            this->member = false;
-         }
-
-      }
-
+//Utility Function
    void displayTrip() {
       cout <<
           this->rideID << "," <<
@@ -209,7 +145,7 @@ public:
           this->endLong << "," <<
           this->member << endl;
    }
-
+//Private variables
 private:
 
    string rideID;
@@ -226,31 +162,12 @@ private:
 
 };
 
-// Have to clean Data
+//Use of vector to make use of clean data
 vector<bikeTrip> readExcelCleanTrips(string filePath, int &originalSize);
 
 long double toRadians(const long int degree);
-//These two long doubles will convert our Lats and Longs from ints to our desired data type.
+// Use lat and long numbers to soon calculate distances
 long double distance(long int lat1, long int long1, long int lat2, long int long2);
-
-bool isWeekend(string date) {
-   int dateBreakIndex = date.find("/");
-    int month = stoi(date.substr(0, dateBreakIndex));
-
-   date = date.erase(0,dateBreakIndex + 1);
-
-   dateBreakIndex = date.find("/");
-   int day = stoi(date.substr(0, dateBreakIndex));
-   day %= 7;
-
-   if (day == 4 || day == 5) {
-        return true;
-   }
-   else {
-        return false;
-    }
-
-}
 
 vector<bikeTrip> optionOne();
 // Menu options via Function declarations
@@ -261,8 +178,6 @@ void optionThree(vector<bikeTrip> trips);
 void optionFour(vector<bikeTrip> trips);
 
 void displayMenu();
-
-
 
 int main() {
 
@@ -275,7 +190,14 @@ int main() {
 
    while(true) {
 
-      displayMenu();
+      cout << "Select a menu option:" << endl;
+      cout << "   1. Select datafile, display rides totals and clean data" << endl;
+      cout << "   2. Display overall trip information" << endl;
+      cout << "   3. Display percentage of members vs. casual riders" << endl;
+      cout << "   4. Display weekday vs weekend usage" << endl;
+      cout << "   5. Extra Credit: find closest station" << endl;
+      cout << "   6. Exit" << endl;
+      cout << "Your choice --> ";
       cin >> optionInput;
 
       if (optionInput == 1) {//If statment to ensure option 1 is chosen first so we can read in the data
@@ -285,13 +207,20 @@ int main() {
          cout << "First read in data by selecting menu option 1";
       }
    }
-
+    //Menu will reappear again
    while (wanttoAdvance) {
-        displayMenu();
+        cout << "Select a menu option:" << endl;
+        cout << "   1. Select datafile, display rides totals and clean data" << endl;
+        cout << "   2. Display overall trip information" << endl;
+        cout << "   3. Display percentage of members vs. casual riders" << endl;
+        cout << "   4. Display weekday vs weekend usage" << endl;
+        cout << "   5. Extra Credit: find closest station" << endl;
+        cout << "   6. Exit" << endl;
+        cout << "Your choice --> ";
         cin >> optionInput;
 
         switch (optionInput) {//User Input will be assigned to different options with this code
-
+            //Switch statement that shows which option will go to which function
            case 1:
             trips = optionOne();
                break;
@@ -303,9 +232,13 @@ int main() {
            case 3:
             optionThree(trips);
                 break;
+                
+            case 4:
+                optionFour(trips);
+                break;
 
            case 6: // This will allow us to exit the program
-            wanttoAdvance = false;
+                goto Label;
             break;
 
            default:
@@ -313,22 +246,9 @@ int main() {
                break;
         }
     }
-
+    Label:
    return 0;
 
-}
-
-//This function will allow us to display to menu to the user
-void displayMenu() {
-
-   cout << "Select a menu option:" << endl;
-   cout << "   1. Select datafile, display rides totals and clean data" << endl;
-   cout << "   2. Display overall trip information" << endl;
-   cout << "   3. Display percentage of members vs. casual riders" << endl;
-   cout << "   4. Display weekday vs weekend usage" << endl;
-   cout << "   5. Extra Credit: find closest station" << endl;
-   cout << "   6. Exit" << endl;
-   cout << "Your choice --> ";
 }
 
 //Option 1
@@ -347,23 +267,23 @@ vector<bikeTrip> optionOne() {
    int choice;
    cin >> choice;
 
-   //We need a switch statement to declare cleanTrips to be the clean data into each excel file
+   //We need a switch statement to read in the appropriate files
    switch (choice) {
 
       case 1:
-         cleanTrips = readExcelCleanTrips(sampleRidesFile, beginningSize);
+         cleanTrips = readExcelCleanTrips("divvyridesampledata.csv", beginningSize);
          break;
       case 2:
-         cleanTrips = readExcelCleanTrips(weekendRidesFile, beginningSize);
+         cleanTrips = readExcelCleanTrips("weekdayweekend.csv", beginningSize);
          break;
       case 3:
-         cleanTrips = readExcelCleanTrips(septRidesFile, beginningSize);
+         cleanTrips = readExcelCleanTrips("all_divvy_rides_september.csv", beginningSize);
          break;
       default:
          cout << "Please choose File 1, 2, or 3 to read in" << endl;
          break;
    };
-
+//Print out number of trips as well as number of clean data trips
    cout << "Total # of trips found in datafile: " << beginningSize << endl <<
        "   Total # of trips in clean data: " << cleanTrips.size() << endl;
 
@@ -373,35 +293,78 @@ vector<bikeTrip> optionOne() {
 vector<bikeTrip> readExcelCleanTrips(string filePath, int &originalSize) {
 
    originalSize = 0;
-   //Next lines of code will ensure file is opened and will present error if its not opened
+   //Ensures file is opened and will present an error if its not opened in line 299
    ifstream inStream;
    inStream.open(filePath);
    assert(inStream.fail() == false);
 
    vector<bikeTrip> tripList;
 
-   string newWord;
+   string excelData;
 
-   // blocks the first read from while to skip title
    bool initialBlock = true;
 
    // read a line into newWord until end of file
-   while (getline(inStream, newWord)) {
-
-      // count original size regardless of it is cleaned or not
+   while (getline(inStream, excelData)) {
+       
       originalSize += 1;
 
-      // if newWord has empty data or is the title just skip it
-      if ((newWord.find(",,") != string::npos) || initialBlock) {
+      // Skipping excel data that is empty
+       if ((excelData.find(",,") <= excelData.length()) || initialBlock) {
          initialBlock = false;
          continue;
       }
-
-      //New trip will be put into the list
-      tripList.push_back(bikeTrip(newWord));
+       
+          tripList.push_back(bikeTrip());
+            // This code will accurately find the commas in the data and then know which data goes to which specific code
+          int commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setRideID(excelData.substr(0, commaSearch));
+       
+                                               
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setType(excelData.substr(0, commaSearch));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setStartTime(excelData.substr(0, commaSearch));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setEndTime(excelData.substr(0, commaSearch));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setStartStationName(excelData.substr(0, commaSearch));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setEndStationName(excelData.substr(0, commaSearch));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setStartLat(stod(excelData.substr(0, commaSearch)));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setStartLong(stod(excelData.substr(0, commaSearch)));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setEndLat(stod(excelData.substr(0, commaSearch)));
+          
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setEndLong(stod(excelData.substr(0, commaSearch)));
+       
+          excelData.erase(0, commaSearch + 1);
+          commaSearch = excelData.find(",");
+          tripList.at(tripList.size() - 1).setMember((excelData.substr(0, commaSearch) == "member\r") ? true : false);
+       //Need /r to ensure excel data regarding to member is being accurately read
+      
    }
-
-   // removes one from original size to remove title
+    
+   // To remove the title
    originalSize -= 1;
 
    inStream.close();
@@ -546,55 +509,58 @@ void optionFour(vector<bikeTrip> trips){
 
           int findSpace = trips.at(index).getStartTime().find(" ");
 
-          string onlyDate = trips.at(index).getStartTime().substr(0, findSpace);
-          bool weekend = isWeekend(onlyDate);
-
-          string onlyTime = trips.at(index).getStartTime().erase(0, findSpace + 1);
-
-          int findColon = onlyTime.find(":");
-
-          int hour = stoi(onlyTime.substr(0, findColon));
-
-          if (weekend) {
-             hourlyweekendRides.at(hour) += 1;
-             totalWeekend += 1;
-          }
-          else {
-             hourlyweekdayRides.at(hour) += 1;
-             totalWeekday += 1;
-          }
+           string onlyDate = trips.at(index).getStartTime().substr(0, findSpace);
+           string onlyTime = trips.at(index).getStartTime().erase(0, findSpace + 1);
+           
+           int dateBreakIndex = onlyTime.find("/");
+           onlyDate.erase(0,2);
+           
+           int day = stoi(onlyDate.substr(0, dateBreakIndex));
+           
+           int findColon = onlyTime.find(":");
+           
+           int hour = stoi(onlyTime.substr(0, findColon));
+           
+           if ((day == 4) || (day == 5) ||( day == 11) || (day == 12) || (day == 18) || (day == 19) || (day == 25) || (day ==26)) {
+               hourlyweekendRides.at(hour) += 1;
+               totalWeekend += 1;
+               //This if statement will allow the code to know which days are specifcally weekends
+           } else{
+                //If it's not a weekday, the following will effect the weekday rides
+               hourlyweekdayRides.at(hour) += 1;
+               totalWeekday += 1;  }
        }
-
+        // largestnumberofRides will keep getting updated
        int largestnumberofRides = 0;
        for (int index = 0; index < hourlyweekendRides.size(); index++) {
           if (largestnumberofRides < hourlyweekendRides.at(index)) {
              largestnumberofRides = hourlyweekendRides.at(index);
           }
-       }
-       for (int index = 0; index < hourlyweekdayRides.size(); index ++) {
-          if (largestnumberofRides < hourlyweekdayRides.at(index)) {
-             largestnumberofRides = hourlyweekdayRides.at(index);
-          }
+           if (largestnumberofRides < hourlyweekdayRides.at(index)) {
+              largestnumberofRides = hourlyweekdayRides.at(index);
+           }
        }
 
        if (option == 1) {
            
           cout << "    LargestNumberOfRides is: " << largestnumberofRides << endl;
-          cout << "   Rides per hour for weekday and weekend" << endl;
+          cout << "   Rides per hour for weekday and weekend:" << endl;
           for (int index = 0; index < hourlyweekdayRides.size(); index++) {
 
              cout << "  " << index << " : " << hourlyweekdayRides.at(index) << "    " << hourlyweekendRides.at(index) << endl;
 
           }
        }
+    
 else if (option == 2) {
     
       for (int index = 0; index < hourlyweekdayRides.size(); index++) {
          cout << "   " << index << ": ";
          cout << string(hourlyweekdayRides.at(index) * 50.0 / largestnumberofRides, '@') << endl;
          cout << string(hourlyweekendRides.at(index) * 50.0 / largestnumberofRides, '+') << endl;
-
+//This will create a 50 column graph depiciting weekday vs weekend rides through the @ and + symbols
       }
 
    }
 }
+
