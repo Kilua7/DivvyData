@@ -23,14 +23,12 @@ using namespace std;
 // filepaths for Macbook testing
 const string sampleRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../divvyridesampledata.csv";
 const string weekendRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../weekdayweekend.csv";
-const string divvyRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../divvyridesampledata.csv";
 const string septRidesFile = "/Users/angadgakhal/Downloads/Datatype/Prog4test/Prog4test/../../../all_divvy_rides_september.csv";
 */
 
 //filepaths for zybooks testing
 const string sampleRidesFile = "divvyridesampledata.csv";
 const string weekendRidesFile = "weekdayweekend.csv";
-const string divvyRidesFile = "divvyridesampledata.csv";
 const string septRidesFile = "all_divvy_rides_september.csv";
 
 class bikeTrip {
@@ -235,13 +233,36 @@ long double toRadians(const long int degree);
 //These two long doubles will convert our Lats and Longs from ints to our desired data type.
 long double distance(long int lat1, long int long1, long int lat2, long int long2);
 
+bool isWeekend(string date) {
+   int dateBreakIndex = date.find("/");
+    int month = stoi(date.substr(0, dateBreakIndex));
+
+   date = date.erase(0,dateBreakIndex + 1);
+
+   dateBreakIndex = date.find("/");
+   int day = stoi(date.substr(0, dateBreakIndex));
+   day %= 7;
+
+   if (day == 4 || day == 5) {
+        return true;
+   }
+   else {
+        return false;
+    }
+
+}
+
 vector<bikeTrip> optionOne();
 // Menu options via Function declarations
 void optionTwo(vector<bikeTrip> trips);
 
 void optionThree(vector<bikeTrip> trips);
 
+void optionFour(vector<bikeTrip> trips);
+
 void displayMenu();
+
+
 
 int main() {
 
@@ -458,11 +479,11 @@ void optionTwo(vector<bikeTrip> trips) {
 
    for (int index = 0; index < trips.size(); index++) {
       tripDist = distance(trips.at(index).getStartLat(), trips.at(index).getStartLng(),
-                  trips.at(index).getEndLat(), trips.at(index).getEndLng());
+                  trips.at(index).getEndLat(), trips.at(index).getEndLng());//For loop that will allow to dsiplay appropriate latitude and longtitude
       
        if (maxtripDist < tripDist) {
          maxtripDist = roundNumber(tripDist);
-         tripMax = trips.at(index);
+         tripMax = trips.at(index);//ensures the biggest trip is stored into maxtripDist variable
       }
 
       distanceSum += tripDist;
@@ -473,15 +494,14 @@ void optionTwo(vector<bikeTrip> trips) {
 
    long double avgDist = roundNumber(distanceSum / trips.size());
 
-   cout << "   Total # of miles traveled: " << distanceSum <<"\n" <<
-         "   Average length of trips in miles:  "<< avgDist << "\n" <<
-         "   \n" <<
-         "   Longest trip information below: \n" <<
-         "   -------------------------------\n" <<
-         "   Trip ID: "<< tripMax.getRideID() <<"\n" <<
-         "   Trip start location: " << tripMax.getStartStationName() << "\n" <<
-         "   Trip end location: " << tripMax.getEndStationName() << "\n" <<
-         "   Trip distance in miles: "<< maxtripDist << endl;
+   cout << "   Total # of miles traveled: " << distanceSum << endl;
+   cout << "   Average length of trips in miles:  "<< avgDist << endl << endl;
+   cout <<      "   Longest trip information below: " << endl;
+   cout <<      "   -------------------------------" << endl;
+   cout <<      "   Trip ID: " << tripMax.getRideID() << endl;
+   cout <<      "   Trip start location: " << tripMax.getStartStationName() << endl;
+   cout <<      "   Trip end location: " << tripMax.getEndStationName() << endl;
+   cout <<      "   Trip distance in miles: "<< maxtripDist << endl;
 }
 
 void optionThree(vector<bikeTrip> trips) {
@@ -499,7 +519,82 @@ void optionThree(vector<bikeTrip> trips) {
    long double percentMembers = roundNumber( totalMembers / (long double)trips.size() * 100.0);
    long double percentCasual = roundNumber((double) totalCasual /(long double)trips.size() * 100.0);
 
-   cout << "Casual Rider Percentage: " << setprecision(1) << fixed << percentCasual << "% " << endl;
+   cout << "Casual Rider Percentage: " << setprecision(1) << fixed << percentCasual << "% " << endl;//Need setprecision and fixed to display the percentage correctly
    cout << "Member Rider Percentage: " << percentMembers << "% " << endl;
 
+}
+
+void optionFour(vector<bikeTrip> trips){
+    
+    
+    cout << "Select type of display: " << "\n";
+    cout << "    1. Counts of rides per hour in the day " << endl;
+    cout << "    2. Proportional 50 column graph with @ for weekday and + for weekend " << endl;
+    cout << "Your selection--> " << endl;
+    
+   
+       int option = 0;
+       cin >> option;
+    
+        double totalWeekend = 0;
+        double totalWeekday = 0;
+
+       vector<double> hourlyweekendRides(24,0);
+       vector<double> hourlyweekdayRides(24,0);
+
+       for (int index = 0; index < trips.size(); index++) {
+
+          int findSpace = trips.at(index).getStartTime().find(" ");
+
+          string onlyDate = trips.at(index).getStartTime().substr(0, findSpace);
+          bool weekend = isWeekend(onlyDate);
+
+          string onlyTime = trips.at(index).getStartTime().erase(0, findSpace + 1);
+
+          int findColon = onlyTime.find(":");
+
+          int hour = stoi(onlyTime.substr(0, findColon));
+
+          if (weekend) {
+             hourlyweekendRides.at(hour) += 1;
+             totalWeekend += 1;
+          }
+          else {
+             hourlyweekdayRides.at(hour) += 1;
+             totalWeekday += 1;
+          }
+       }
+
+       int largestnumberofRides = 0;
+       for (int index = 0; index < hourlyweekendRides.size(); index++) {
+          if (largestnumberofRides < hourlyweekendRides.at(index)) {
+             largestnumberofRides = hourlyweekendRides.at(index);
+          }
+       }
+       for (int index = 0; index < hourlyweekdayRides.size(); index ++) {
+          if (largestnumberofRides < hourlyweekdayRides.at(index)) {
+             largestnumberofRides = hourlyweekdayRides.at(index);
+          }
+       }
+
+       if (option == 1) {
+           
+          cout << "    LargestNumberOfRides is: " << largestnumberofRides << endl;
+          cout << "   Rides per hour for weekday and weekend" << endl;
+          for (int index = 0; index < hourlyweekdayRides.size(); index++) {
+
+             cout << "  " << index << " : " << hourlyweekdayRides.at(index) << "    " << hourlyweekendRides.at(index) << endl;
+
+          }
+       }
+else if (option == 2) {
+    
+      for (int index = 0; index < hourlyweekdayRides.size(); index++) {
+         cout << "   " << index << ": ";
+         cout << string(hourlyweekdayRides.at(index) * 50.0 / largestnumberofRides, '@') << endl;
+         cout << string(hourlyweekendRides.at(index) * 50.0 / largestnumberofRides, '+') << endl;
+
+      }
+
+   }
 }
